@@ -1,5 +1,9 @@
 # DIN Image
 
+## Instalação Laravel
+
+## Instação
+
 ```php
 $this->dinImage->setWidth(30)
 ->setHeight(20)
