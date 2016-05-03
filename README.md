@@ -22,7 +22,8 @@ php artisan vendor:publish
 ## Utilizando
 ```php
 use DinImage;
-
+```
+```php
 return $image = DinImage::setWidth(100)
 	->setHeight(100)
 	->setCommand('fit')

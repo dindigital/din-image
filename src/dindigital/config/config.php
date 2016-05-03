@@ -28,6 +28,16 @@ return array(
      |--------------------------------------------------------------------------
      |
      */
-    'dest_folder' => 'images',
+    'dest_folder' => 'images/',
+
+    /*
+     |--------------------------------------------------------------------------
+     | Url
+     | É o caminho que antecede a imagem gerada
+     | Por padrão podemos deixar o "/" que fará o retorno no domínio atual
+     |--------------------------------------------------------------------------
+     |
+     */
+    'url' => '/',
 
 );

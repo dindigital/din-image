@@ -46,6 +46,10 @@ class DinImage
             throw new ConfigException('O diretoório de destino não foi definido');
         }
 
+        if (!isset($this->config['url'])) {
+            $this->config['url'] = '';
+        }
+
         if (!is_file($this->config['default_image'])) {
             throw new FilesystemException('A imagem padrão não foi encontrada');
         }
@@ -134,7 +138,7 @@ class DinImage
             $img->save($this->image, 100);
         }
 
-        return $this->image;
+        return $this->config['url'] . $this->image;
     }
 
     private function getHash()
