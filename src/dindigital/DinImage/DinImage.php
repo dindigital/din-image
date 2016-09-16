@@ -99,6 +99,45 @@ class DinImage
         return $this;
     }
 
+    
+    /**
+     * Setar um diretório para salvar a imagem diferente do diretório padrão
+     * que foi setado nas configurações.
+     * @param string $path
+     */
+    public function setSpecificPath($path)
+    {
+        $this->config['dest_folder'] = $path;
+        
+        return $this;
+    }
+    
+    
+    /**
+     * Cria o diretório e dá permissão 775 caso o diretório não exista
+     * @param string $path
+     * @return \Din\DinImage\DinImage
+     */
+    private function createPath($path)
+    {
+        dd($path);
+        
+        
+        //criar path sem dependencia do laravel , 
+       // para utilizar o repositório em outros projetos
+        if(! Storage::disk('images')->has($path))
+        {
+            Storage::disk('images')->makeDirectory($path);
+        }
+        
+        //dar permissão na pasta criada
+        
+        return $path;
+    }
+    
+    
+
+
     public function setImage($image_source)
     {
         $image_source = urldecode($image_source);

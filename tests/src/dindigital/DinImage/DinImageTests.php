@@ -71,4 +71,24 @@ class DinImageTests extends PHPUnit_Framework_TestCase
         $this->assertEquals($size[1], 200);
     }
 
+    /**
+     * @todo completar e testar
+     */
+    public function testImageWithSpecificPath()
+    {
+        $specifcPath = __DIR__ . '/../resources/dest/specifc_path_image/';
+        
+        $image = $this->dinImage->setWidth(200)
+            ->setHeight(200)
+            ->setCommand('fit')
+            ->setName('Nome da Imagem 2')
+            ->setSpecificPath($specifcPath)
+            ->setImage('balbalbalbaal')->render();
+
+        $size = getimagesize($image);
+
+        $this->assertEquals($size[0], 200);
+        $this->assertEquals($size[1], 200);
+    }
+
 }
