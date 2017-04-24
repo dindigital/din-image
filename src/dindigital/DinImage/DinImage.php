@@ -30,6 +30,8 @@ class DinImage
 
     private $intervention;
 
+    private $watermark = array();
+
     public function __construct(array $config = [])
     {
         $this->config = $config;
@@ -99,6 +101,21 @@ class DinImage
         return $this;
     }
 
+    /**
+     * @param array $watermark
+     * watermark['src'] - Path completo da imagem
+     * watermark['position'] - Posição, pode ser:
+     *  top-left (default), top, top-right, left, center, right, bottom-left, bottom, bottom-right
+     * watermark['x'] - Offset em X
+     * watermark['y'] - Offset em Y
+     */
+    public function setWatermark(array $watermark)
+    {
+        $this->watermark = $watermark;
+
+        return $this;
+    }
+
     public function setImage($image_source)
     {
         $image_source = urldecode($image_source);
@@ -111,7 +128,14 @@ class DinImage
         $ext = pathinfo($this->image_source, PATHINFO_EXTENSION);
 
         $this->image = $this->config['dest_folder'] .
-            $this->name . $this->getHash() . '.' . $ext;
+            $this->name . $this->getHash();
+
+        if (count($this->watermark))
+        {
+            $this->image .= 'watermark';
+        }
+
+        $this->image .= '.' . $ext;
 
         return $this;
     }
@@ -135,7 +159,19 @@ class DinImage
                     $img = $this->intervention->make($this->image_source)->heighten($this->height);
                     break;
             }
+
+            if (count($this->watermark))
+            {
+                $img->insert(
+                    $this->watermark['src'],
+                    $this->watermark['position'],
+                    $this->watermark['x'],
+                    $this->watermark['y']
+                );
+            }
+
             $img->save($this->image, 100);
+
         }
 
         return $this->config['url'] . $this->image;
