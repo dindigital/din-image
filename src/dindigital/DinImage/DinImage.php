@@ -150,13 +150,13 @@ class DinImage
             switch ($this->command)
             {
                 case 'fit':
-                    $img = $this->intervention->make($this->image_source)->fit($this->width, $this->height);
+                    $img = $this->intervention->make($this->image_source)->orientate()->fit($this->width, $this->height);
                     break;
                 case 'widen':
-                    $img =$this->intervention->make($this->image_source)->widen($this->width);
+                    $img =$this->intervention->make($this->image_source)->orientate()->widen($this->width);
                     break;
                 case 'heighten':
-                    $img = $this->intervention->make($this->image_source)->heighten($this->height);
+                    $img = $this->intervention->make($this->image_source)->orientate()->heighten($this->height);
                     break;
             }
 
