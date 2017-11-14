@@ -30,8 +30,10 @@ class DinImageServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton('dinimage', function ($app) {
-            return new DinImage($app['config']['din-image']);
+        $this->app['dinimage'] = $this->app->share(function ($app) {
+            return new DinImage(
+                $app['config']['din-image']
+            );
         });
     }
     /**
