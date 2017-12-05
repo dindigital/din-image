@@ -147,19 +147,26 @@ class DinImage
             $this->intervention = new ImageManager(array('driver' => 'gd'));
             $img = null;
 
-            switch ($this->command)
-            {
-                case 'fit':
-                    $img = $this->intervention->make($this->image_source)->orientate()->fit($this->width, $this->height);
-                    break;
-                case 'widen':
-                    $img =$this->intervention->make($this->image_source)->orientate()->widen($this->width);
-                    break;
-                case 'heighten':
-                    $img = $this->intervention->make($this->image_source)->orientate()->heighten($this->height);
-                    break;
-            }
-
+            do {
+                try {
+                    switch ($this->command) {
+                        case 'fit':
+                            $img = $this->intervention->make($this->image_source)->orientate()->fit($this->width, $this->height);
+                            break;
+                        case 'widen':
+                            $img =$this->intervention->make($this->image_source)->orientate()->widen($this->width);
+                            break;
+                        case 'heighten':
+                            $img = $this->intervention->make($this->image_source)->orientate()->heighten($this->height);
+                            break;
+                    }
+                    $loop = false;
+                } catch (\Intervention\Image\Exception\NotReadableException $e) {
+                    $this->setImage($this->config['default_image']);
+                    $loop = true;
+                }
+            } while ($loop);
+            
             if (count($this->watermark))
             {
                 $img->insert(
