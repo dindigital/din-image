@@ -186,7 +186,8 @@ class DinImage
 
     private function getHash()
     {
-        $hash = md5($this->image_source);
+        $filemtime = filemtime($this->image_source);
+        $hash = md5($this->image_source . $filemtime);
         return '-' . Str::limit($hash, 5, '');
     }
 
