@@ -2,11 +2,11 @@
 
 namespace Din\DinImage;
 
-use Illuminate\Support\Str;
-use Intervention\Image\ImageManager;
+use Din\DinImage\Exceptions\CommandException;
 use Din\DinImage\Exceptions\ConfigException;
 use Din\DinImage\Exceptions\FilesystemException;
-use Din\DinImage\Exceptions\CommandException;
+use Illuminate\Support\Str;
+use Intervention\Image\ImageManager;
 
 class DinImage
 {
@@ -30,7 +30,7 @@ class DinImage
 
     private $intervention;
 
-    private $watermark = array();
+    private $watermark = [];
 
     public function __construct(array $config = [])
     {
@@ -81,7 +81,7 @@ class DinImage
 
     public function setCommand($command)
     {
-        $commands = ['fit', 'widen', 'heighten'];
+        $commands = ['resizecanvas', 'fit', 'widen', 'heighten'];
 
         if (!in_array($command, $commands)) {
             throw new CommandException('Método inválido');
@@ -149,15 +149,22 @@ class DinImage
 
             do {
                 try {
+                    $img = $this
+                        ->intervention
+                        ->make($this->image_source)
+                        ->orientate();
                     switch ($this->command) {
+                        case 'resizecanvas':
+                            $img = $img->resizeCanvas($this->width, $this->height);
+                            break;
                         case 'fit':
-                            $img = $this->intervention->make($this->image_source)->orientate()->fit($this->width, $this->height);
+                            $img = $img->fit($this->width, $this->height);
                             break;
                         case 'widen':
-                            $img =$this->intervention->make($this->image_source)->orientate()->widen($this->width);
+                            $img = $img->widen($this->width);
                             break;
                         case 'heighten':
-                            $img = $this->intervention->make($this->image_source)->orientate()->heighten($this->height);
+                            $img = $img->heighten($this->height);
                             break;
                     }
                     $loop = false;
